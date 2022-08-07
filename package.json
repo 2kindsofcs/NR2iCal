@@ -1,0 +1,23 @@
+{
+  "name": "nr2ical",
+  "version": "1.0.0",
+  "description": "naver reservation to iCal. 집에 놀러온 친구가 심심하다?고 코??딩??하자고 해??서? 만들게 됨.  ^오^",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2kindsofcs/NR2iCal.git"
+  },
+  "author": "2kindsofcs, perlmint",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2kindsofcs/NR2iCal/issues"
+  },
+  "homepage": "https://github.com/2kindsofcs/NR2iCal#readme",
+  "dependencies": {
+    "node-fetch": "^3.2.10"
+  },
+  "type": "module"
+}
