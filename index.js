@@ -33,123 +33,26 @@ const payload = {
     totalCount
     bookings {
       bookingId
-      businessId
       businessName
-      impPlaceId
-      isPlaceHidden
       serviceName
-      businessCategory
-      encryptedBookingId
-      bizItemId
-      bizItemName
-      isRefunded
-      refundPrice
-      couponPrice
-      isMask
-      price
-      bookingCount
       bookingStatusCode
-      nPayChargedStatusCode
       isCompleted
       startDate
       endDate
       regDateTime
-      reviewId
-      deliveryAddressJson
-      shippingStatus
-      extraFeeJson
-      cancelledExtraFeeJson
       completedDateTime
       cancelledDateTime
-      snapshotJson
-      payments
       business {
-        id
-        businessId
         addressJson
-        businessTypeId
-        isPossibleUserCancel
         completedPinValue
-        placeCategoryId
-        businessCategoryConf {
-          businessCategory
-          name
-          bookingSettingJson
-          editorId
-          editedDateTime
-          regDateTime
-          __typename
-        }
-        businessCategory
         name
         serviceName
         isImp
         isDeleted
         isCompletedButtonImp
-        desc
-        email
         phoneInformationJson
-        websiteUrl
-        isNaverTalkChannelActivated
-        isNaverTalkRelated
-        naverTalkAccount
-        agencies {
-          agencyId
-          agencyCode
-          name
-          phone
-          __typename
-        }
-        nPayErrorStatus
-        nPayRegStatusCode
-        impPlaceId
-        isSeveranceAgency
-        __typename
       }
-      bizItem {
-        deliveryConfJson
-        __typename
-      }
-      visitLogJson {
-        beforeVisitCount
-        sameDayVisitCount
-        beforeVisitDate
-        __typename
-      }
-      impPlaceId
-      parcelDeliveryCourierCode
-      parcelDelivery
-      parcelDeliveryOriginPlaceId
-      placeStatusCode
-      isImpPlace
-      reviewDetails {
-        id
-        reviewId
-        score
-        bookingId
-        body
-        userId
-        isNonmember
-        bizItemId
-        bizItemType
-        resourceUrlList
-        isImp
-        source
-        votedKeywords {
-          category
-          keywords {
-            code
-            label
-            emojiUrl
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      __typename
     }
-    __typename
   }
 }
 `,
