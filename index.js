@@ -66,11 +66,15 @@ const payload = {
 const serialized_payload = JSON.stringify(payload);
 // 일단 최근 4개거 갖고올수잇는지 함 봅시다
 
-fetch("https://m.booking.naver.com/graphql", {
-    "headers": {
-        "content-type": "application/json",
-        "cookie": cookie_items.join("; "),
-    },
-    "body": serialized_payload,
-    "method": "POST"
-}).then(res => res.json()).then(body => console.log(body));
+(async function() {
+    const res = await fetch("https://m.booking.naver.com/graphql", {
+        "headers": {
+            "content-type": "application/json",
+            "cookie": cookie_items.join("; "),
+        },
+        "body": serialized_payload,
+        "method": "POST"
+    });
+    const body = await res.json();
+    console.log(body);
+})();
