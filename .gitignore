@@ -2,3 +2,8 @@ node_modules/
 
 config/*.json
 !config/example.json
+
+
+# Added by cargo
+
+/target
