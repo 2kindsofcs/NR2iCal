@@ -3,10 +3,15 @@
 // 2. 구글(이든 뭐든)이 static serving 되는 ical 파일을 가져와서 알아서 쓴다
 
 import fetch from "node-fetch"
+import config from "config"
 
 // 앱이 처음에 딱 실행될때 네이버 세션이 필요함.
-const NID_AUT = "example"
-const NID_SES = "example"
+const NID_AUT = config.get('NID_AUT');
+const NID_SES = config.get("NID_SES");
+const cookie_items = [
+    `NID_AUT=${NID_AUT}`,
+    `NID_SES=${NID_SES}`,
+];
 
 const endpoint = "https://m.booking.naver.com/graphql"
 

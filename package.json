@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/2kindsofcs/NR2iCal#readme",
   "dependencies": {
+    "config": "^3.3.7",
     "node-fetch": "^3.2.10"
   },
   "type": "module"
