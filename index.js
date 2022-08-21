@@ -4,6 +4,8 @@
 
 import fetch from "node-fetch"
 import config from "config"
+import ical from "ical-generator"
+import http from "http"
 
 // 앱이 처음에 딱 실행될때 네이버 세션이 필요함.
 const NID_AUT = config.get('NID_AUT');
@@ -66,7 +68,9 @@ const payload = {
 const serialized_payload = JSON.stringify(payload);
 // 일단 최근 4개거 갖고올수잇는지 함 봅시다
 
-(async function() {
+const calendar = ical({ name: 'Naver reservation' });
+
+(async function () {
     const res = await fetch("https://m.booking.naver.com/graphql", {
         "headers": {
             "content-type": "application/json",
@@ -75,6 +79,39 @@ const serialized_payload = JSON.stringify(payload);
         "body": serialized_payload,
         "method": "POST"
     });
+    /**
+     * @type NaverReservationResponse
+     */
     const body = await res.json();
-    console.log(body);
+    for (const booking of body.data.booking.bookings) {
+        /**
+         * @type import('ical-generator').ICalLocation | null
+         */
+        let location = null;
+        if (booking.business) {
+            location = {
+                title: booking.business.serviceName,
+                address: booking.business.addressJson.address,
+                geo: {
+                    lat: booking.business.addressJson.posLat,
+                    lon: booking.business.addressJson.posLong,
+                }
+            };
+        }
+
+        if (booking.bookingStatusCode != STATUS_CODE.Cancel) {
+            calendar.createEvent({
+                start: new Date(booking.startDate),
+                end: new Date(booking.endDate),
+                summary: booking.serviceName,
+                location,
+                created: new Date(booking.regDateTime),
+            });
+        }
+    }
+
+    http.createServer((req, res) => calendar.serve(res))
+        .listen(3000, '127.0.0.1', () => {
+            console.log('Server running at http://127.0.0.1:3000/');
+        });
 })();
