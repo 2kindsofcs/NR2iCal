@@ -27,20 +27,141 @@ const payload = {
             page: 0,
         },
     },
-    query: `que
+    query: `query bookings($input: BookingParams) {
+  booking(input: $input) {
+    id
+    totalCount
+    bookings {
+      bookingId
+      businessId
+      businessName
+      impPlaceId
+      isPlaceHidden
+      serviceName
+      businessCategory
+      encryptedBookingId
+      bizItemId
+      bizItemName
+      isRefunded
+      refundPrice
+      couponPrice
+      isMask
+      price
+      bookingCount
+      bookingStatusCode
+      nPayChargedStatusCode
+      isCompleted
+      startDate
+      endDate
+      regDateTime
+      reviewId
+      deliveryAddressJson
+      shippingStatus
+      extraFeeJson
+      cancelledExtraFeeJson
+      completedDateTime
+      cancelledDateTime
+      snapshotJson
+      payments
+      business {
+        id
+        businessId
+        addressJson
+        businessTypeId
+        isPossibleUserCancel
+        completedPinValue
+        placeCategoryId
+        businessCategoryConf {
+          businessCategory
+          name
+          bookingSettingJson
+          editorId
+          editedDateTime
+          regDateTime
+          __typename
+        }
+        businessCategory
+        name
+        serviceName
+        isImp
+        isDeleted
+        isCompletedButtonImp
+        desc
+        email
+        phoneInformationJson
+        websiteUrl
+        isNaverTalkChannelActivated
+        isNaverTalkRelated
+        naverTalkAccount
+        agencies {
+          agencyId
+          agencyCode
+          name
+          phone
+          __typename
+        }
+        nPayErrorStatus
+        nPayRegStatusCode
+        impPlaceId
+        isSeveranceAgency
+        __typename
+      }
+      bizItem {
+        deliveryConfJson
+        __typename
+      }
+      visitLogJson {
+        beforeVisitCount
+        sameDayVisitCount
+        beforeVisitDate
+        __typename
+      }
+      impPlaceId
+      parcelDeliveryCourierCode
+      parcelDelivery
+      parcelDeliveryOriginPlaceId
+      placeStatusCode
+      isImpPlace
+      reviewDetails {
+        id
+        reviewId
+        score
+        bookingId
+        body
+        userId
+        isNonmember
+        bizItemId
+        bizItemType
+        resourceUrlList
+        isImp
+        source
+        votedKeywords {
+          category
+          keywords {
+            code
+            label
+            emojiUrl
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
 `,
 }
-console.log(JSON.stringify(payload))
-
+const serialized_payload = JSON.stringify(payload);
 // 일단 최근 4개거 갖고올수잇는지 함 봅시다
 
 fetch("https://m.booking.naver.com/graphql", {
     "headers": {
         "content-type": "application/json",
-        "cookie": [
-            "cookie"
-        ].join("; "),
+        "cookie": cookie_items.join("; "),
     },
-    "body": "body",
+    "body": serialized_payload,
     "method": "POST"
 }).then(res => res.json()).then(body => console.log(body));
