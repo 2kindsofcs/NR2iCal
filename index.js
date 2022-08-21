@@ -13,13 +13,19 @@ const cookie_items = [
     `NID_SES=${NID_SES}`,
 ];
 
+const STATUS_CODE = {
+    "Cancel": "RC04",
+    "Completed": "RC08",
+    "Reserved": "RC05",
+};
+
 const endpoint = "https://m.booking.naver.com/graphql"
 
 const payload = {
     operationName: "bookings",
     variables: {
         input: {
-            queryType: ["RC08", "RC04", "RC05"].join(","),
+            queryType: [STATUS_CODE.Cancel, STATUS_CODE.Completed, STATUS_CODE.Reserved].join(","),
             businessMainCategory: "ALL",
             startDate: null,
             endDate: null,
