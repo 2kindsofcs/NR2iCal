@@ -1,7 +1,8 @@
 use std::str::FromStr;
 
+use chrono::Datelike;
 use reqwest::cookie::{CookieStore, Jar};
-use serde::de::value::BoolDeserializer;
+use serde_with::serde_as;
 
 mod reservation_status_code {
     pub const CANCEL: &str = "RC04";
@@ -26,16 +27,18 @@ struct Booking2 {
     total_count: u32,
 }
 
+#[serde_as]
 #[derive(Debug, Clone, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct Booking {
-    booking_id: String,
+    #[serde_as(as = "serde_with::DisplayFromStr")]
+    booking_id: i64,
     booking_status_code: String,
     // business: any
     business_name: String,
     cancelled_date_time: Option<chrono::DateTime<chrono::FixedOffset>>,
     completed_date_time: chrono::DateTime<chrono::FixedOffset>,
-    end_date: String,
+    end_date: chrono::NaiveDate,
     is_completed: bool,
     // regDatetime: any
     service_name: String,
@@ -45,6 +48,9 @@ struct Booking {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     env_logger::init();
+
+    let db_pool = sqlx::SqlitePool::connect("./data.sqlite").await?;
+    sqlx::migrate!().run(&db_pool).await?;
 
     const ENDPOINT: &str = "https://m.booking.naver.com/graphql";
     let cookie_url = reqwest::Url::from_str(ENDPOINT).unwrap();
@@ -110,9 +116,28 @@ async fn main() -> anyhow::Result<()> {
         .header(reqwest::header::COOKIE, jar.cookies(&cookie_url).unwrap())
         .json(&payload)
         .build()?;
-    println!("{:?}", &req);
+    // println!("{:?}", &req);
+
+    let tz = chrono::FixedOffset::east(9 * 3600);
 
     let res = client.execute(req).await?;
-    println!("{:#?}", res.json::<NaverCalendarResponse>().await?);
+    let res = res.json::<NaverCalendarResponse>().await?;
+    // println!("{:#?}", );
+    for reservation in res.data.booking.bookings {
+        let id = reservation.booking_id as i64;
+        let name = reservation.service_name;
+        let start_date = reservation.start_date;
+        let end_date = reservation.end_date;
+        sqlx::query!(
+            "INSERT OR REPLACE INTO reservation (`id`, `name`, `start_date`, `end_date`) VALUES (?, ?, ?, ?)",
+            id,
+            name,
+            start_date,
+            end_date
+        )
+        .execute(&db_pool)
+        .await?;
+    }
+
     Ok(())
 }
