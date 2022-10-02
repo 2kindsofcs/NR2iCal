@@ -1,11 +1,45 @@
 use std::str::FromStr;
 
 use reqwest::cookie::{CookieStore, Jar};
+use serde::de::value::BoolDeserializer;
 
 mod reservation_status_code {
     pub const CANCEL: &str = "RC04";
     pub const COMPLETED: &str = "RC08";
     pub const RESERVED: &str = "RC05";
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+struct NaverCalendarResponse {
+    data: Data,
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+struct Data {
+    booking: Booking2,
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct Booking2 {
+    bookings: Vec<Booking>,
+    total_count: u32,
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct Booking {
+    booking_id: String,
+    booking_status_code: String,
+    // business: any
+    business_name: String,
+    cancelled_date_time: Option<chrono::DateTime<chrono::FixedOffset>>,
+    completed_date_time: chrono::DateTime<chrono::FixedOffset>,
+    end_date: String,
+    is_completed: bool,
+    // regDatetime: any
+    service_name: String,
+    start_date: chrono::NaiveDate,
 }
 
 #[tokio::main]
@@ -79,6 +113,6 @@ async fn main() -> anyhow::Result<()> {
     println!("{:?}", &req);
 
     let res = client.execute(req).await?;
-    println!("{}", res.json::<serde_json::Value>().await?);
+    println!("{:#?}", res.json::<NaverCalendarResponse>().await?);
     Ok(())
 }
