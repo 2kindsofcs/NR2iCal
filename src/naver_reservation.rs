@@ -92,7 +92,7 @@ pub struct Address {
     pub road_addr: String,
 }
 
-const ENDPOINT: once_cell::sync::Lazy<reqwest::Url> = once_cell::sync::Lazy::new(|| {
+static ENDPOINT: once_cell::sync::Lazy<reqwest::Url> = once_cell::sync::Lazy::new(|| {
     use std::str::FromStr;
     unsafe { reqwest::Url::from_str("https://m.booking.naver.com/graphql").unwrap_unchecked() }
 });

@@ -1,8 +1,7 @@
 mod naver_reservation;
 
-use std::{fmt::Display, io::BufWriter};
+use std::io::BufWriter;
 
-use anyhow::Context;
 use axum::{extract::Extension, response::IntoResponse, routing::get, Router};
 use chrono::{DateTime, NaiveDateTime, Utc};
 use ics::{components::Property, Event, ICalendar};
